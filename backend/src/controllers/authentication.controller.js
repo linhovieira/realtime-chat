@@ -31,7 +31,7 @@ export const signup = async (req, res) => {
         const userSaved = await newUser.save();
         generateToken(userSaved._id, res);
 
-        await sendWelcomeEmail(userSaved['email'], userSaved['fullName'], Env.CLIENT_URL);
+        // await sendWelcomeEmail(userSaved['email'], userSaved['fullName'], Env.CLIENT_URL);
 
         return res.status(201).json({ id: newUser._id, fullName: newUser['fullName'], email: newUser['email'], profilePicture: newUser['profilePicture'] });
 
@@ -64,9 +64,9 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials!' });
         }
 
-        generateToken(user._id, res);
+        generateToken(user['_id'], res);
 
-        return res.status(200).json({ id: user._id, fullName: user['fullName'], email: user['email'], profilePicture: user['profilePicture'] });
+        return res.status(200).json({ id: user['_id'], fullName: user['fullName'], email: user['email'], profilePicture: user['profilePicture'] });
 
     } catch (error) {
         console.warn('An error occurred while trying request path login!');

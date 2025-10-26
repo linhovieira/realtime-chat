@@ -44,7 +44,7 @@ export const getChatPartners = async (req, res) => {
             .sort({ createdAt: 1 });
 
         const chatPartnersIds = [...new Set(
-            messages.map(message => message.senderId.toString() === userId ? message.receiverId : message.senderId)
+            messages.map(message => message.senderId.toString() === userId.toString() ? message.receiverId : message.senderId)
         )];
 
         const chatPartners = await User.find({ _id: { $in: chatPartnersIds } }, {}, undefined).select('-password');

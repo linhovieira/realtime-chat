@@ -6,10 +6,10 @@ import { arcjetProtection } from '../middlewares/arcjet.middleware.js';
 
 const router = express.Router();
 
-router(arcjetProtection, verifyCredential);
+router.use(arcjetProtection, verifyCredential);
 
 router.get('/profile', getProfile);
-router.post('/update-profile', updateProfile);
+router.put('/update-profile', updateProfile);
 
 
 export default router;
