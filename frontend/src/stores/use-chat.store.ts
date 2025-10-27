@@ -85,5 +85,38 @@ export const useChatStore = create<ChatStore>((set, get) => ({
          set({ messages: messages });
          toast.error(`Error send message from ${selectedUser?._id}! Error: ${ error.response.data.message }`);
       }
+   },
+
+   subscribeToMessages: () => {
+      const { selectedUser, isSoundEnabled } = get();
+      if (!selectedUser)
+         return;
+
+      const socket = useAuthStore.getState().socket;
+      if (!socket)
+         return;
+
+      socket.on('messages', (content: any) => {
+         const isMessageSentFromSelectedUser = content.senderId === selectedUser?._id;
+         if (!isMessageSentFromSelectedUser)
+            return;
+
+         const currentMessages = get().messages;
+         set({ messages: [...currentMessages, content] });
+
+         if (isSoundEnabled) {
+            const notificationSound = new Audio('/sounds/notification.mp3');
+            notificationSound.currentTime = 0;
+            notificationSound.play().catch((error) => toast.error('Error playing notification sound! Error: ' + error.message));
+         }
+      });
+   },
+
+   unsubscribeFromMessages: () => {
+      const socket = useAuthStore.getState().socket;
+      if (!socket)
+         return;
+
+      socket.off('messages');
    }
 }));

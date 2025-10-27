@@ -5,6 +5,7 @@ import { Env } from './src/env.js';
 
 import app from './src/app.js';
 import { connectDB } from './src/libraries/database.js';
+import { SocketInstance } from './src/libraries/socket.js';
 
 const PORT = Env.PORT;
 
@@ -16,7 +17,10 @@ const server = Env.IS_HTTPS ? https.createServer(serverOptions, app) : http.crea
 
 connectDB()
     .then(() => {
-        server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+        server.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+            SocketInstance(server);
+        });
     })
     .catch(error => {
         console.warn('An error occurred while trying to connect to the MongoDB database!');

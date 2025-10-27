@@ -19,4 +19,7 @@ export interface ChatStore {
 
    getMessagesByUserId: (userId: string) => void;
    sendMessage: (message: any) => void;
+
+   subscribeToMessages: () => void;
+   unsubscribeFromMessages: () => void;
 }
